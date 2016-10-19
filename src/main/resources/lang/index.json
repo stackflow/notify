@@ -1,0 +1,13 @@
+{
+  "files": [
+    {
+      "file": "strings.properties",
+      "locale": "en",
+      "isDefault": true
+    },
+    {
+      "file": "strings_ru.properties",
+      "locale": "ru"
+    }
+  ]
+}

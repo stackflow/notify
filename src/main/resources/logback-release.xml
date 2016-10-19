@@ -1,0 +1,54 @@
+<configuration debug="false" scan="true" scanPeriod="60 seconds">
+
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <encoder>
+            <pattern>%date %-5level %logger{36} [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="commonAppender" class="ch.qos.logback.classic.net.SyslogAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder>
+            <charset>utf-8</charset>
+            <pattern>%date %level [%thread] %logger{20} [%file:%line] %msg%n</pattern>
+        </encoder>
+        <syslogHost>192.168.109.5</syslogHost>
+        <port>39041</port>
+        <facility>USER</facility>
+        <suffixPattern>%date %property{log.label} %-5level %logger{36} [%file:%line] %msg</suffixPattern>
+    </appender>
+
+    <appender name="asyncCommonAppender" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="commonAppender"/>
+    </appender>
+
+    <appender name="errorAppender" class="ch.qos.logback.classic.net.SyslogAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <encoder>
+            <charset>utf-8</charset>
+            <pattern>%date %level [%thread] %logger{20} [%file:%line] %msg%n</pattern>
+        </encoder>
+        <syslogHost>192.168.109.5</syslogHost>
+        <port>39042</port>
+        <facility>USER</facility>
+        <suffixPattern>%date %property{log.label} %-5level %logger{36} [%file:%line] %msg</suffixPattern>
+    </appender>
+
+    <logger name="com.datastax.driver" level="INFO"/>
+    <logger name="org.apache.kafka" level="INFO"/>
+    <logger name="org.apache.zookeeper" level="INFO"/>
+
+    <root level="INFO">
+        <appender-ref ref="stdout" />
+        <appender-ref ref="asyncCommonAppender" />
+        <appender-ref ref="errorAppender" />
+    </root>
+
+</configuration>

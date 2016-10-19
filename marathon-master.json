@@ -1,0 +1,47 @@
+{
+  "id": "lm2-vk-notificator-master",
+  "cpus": 0.1,
+  "mem": 0,
+  "cmd": "exec ./container-start.sh",
+  "env": {
+    "CONFIG": "master.conf",
+    "LOGBACK_CONFIG": "logback-release.xml",
+    "LOG_LABEL": "LM2-VK-NOTIFICATOR-MASTER",
+    "JENKINS_BUILD_ID": "BUILD_NUMBER"
+  },
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "registry.mobak.ru:5443/lm2-vk-notificator-master:latest",
+      "network": "BRIDGE",
+      "portMappings": [
+        {"containerPort": 8000, "hostPort": 0 }
+      ],
+      "parameters": [
+        { "key": "cpu-shares", "value": "0" }
+      ],
+      "forcePullImage": true
+    }
+  },
+  "backoffSeconds": 60,
+  "backoffFactor": 1.5,
+  "maxLaunchDelaySeconds": 3600,
+  "healthChecks": [
+    {
+      "protocol": "HTTP",
+      "path": "/status",
+      "portIndex": 0,
+      "gracePeriodSeconds": 300,
+      "intervalSeconds": 60,
+      "timeoutSeconds": 30,
+      "maxConsecutiveFailures": 3
+    }
+  ],
+  "upgradeStrategy": {
+    "minimumHealthCapacity": 0,
+    "maximumOverCapacity": 0
+  },
+  "uris": [
+    "file:///root/.dockercfg"
+  ]
+}
